@@ -40,13 +40,14 @@
 .NOTES
     This release:
 
-        Version: 0.2 [Set also in the $Version variable]
+        Version: 0.3 [Set also in the $Version variable]
         Date:    25 October 2022
         Author:  Rob Pomeroy
         Company: Intech Ltd for Edmundson Electrical
 
     Version history:
 
+        0.3 - 25 October 2022 - tidying config interpolation
         0.2 - 25 October 2022 - add version information in output
         0.1 - 24 October 2022 - testing
 
@@ -64,7 +65,7 @@ Param(
 ###########
 # VERSION #
 ###########
-$Version = "0.2"
+$Version = "0.3"
 
 
 #############
@@ -89,6 +90,7 @@ while($null -eq $LANIP -or $LANIP -eq '') {
 $Network = ($LANIP  -Replace "\.[^.]*$", ".")
 Write-Host "[$Version] Network prefix is $Network"
 
+# Check if switch number passed as parameter, and if so, if it is valid
 if($PSBoundParameters.ContainsKey('SwitchNumber')) {
     $SwitchNumber = Test-SwitchNumber -SwitchNumber $SwitchNumber
 }
@@ -146,7 +148,7 @@ dos-control tcpsyn
 dos-control tcpsynfin
 dos-control tcpfrag
 dos-control tcpoffset
-ip domain name "switch$($SwitchNumber).$ProfitCentre.epcs-wan.eel.co.uk"
+ip domain name "switch$SwitchNumber.$ProfitCentre.epcs-wan.eel.co.uk"
 ip name server $($Network)100
 username "admin" password `$6`$SyikKK/HSmICwMD6`$N65AtJZPLMppXXizdJpRYE44y3HTCo78vQAnBAKdAF8lSMXmBT8JBWCUZAczxppoTeBytrqkPiqhDwvO7dAAD1 encryption-type sha512 level 15 encrypted
 line console
@@ -154,7 +156,7 @@ serial timeout 0
 exit
 line telnet
 exit
-snmp-server sysname "Switch $($SwitchNumber)"
+snmp-server sysname "Switch $SwitchNumber"
 snmp-server location "$ProfitCentre"
 !
 snmp-server community "servicecentre"
