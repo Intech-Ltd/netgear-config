@@ -40,13 +40,14 @@
 .NOTES
     This release:
 
-        Version: 0.3 [Set also in the $Version variable]
-        Date:    25 October 2022
+        Version: 0.4 [Set also in the $Version constant]
+        Date:    26 October 2022
         Author:  Rob Pomeroy
         Company: Intech Ltd for Edmundson Electrical
 
     Version history:
 
+        0.4 - 26 October 2022 - change of source IP mask in ACL
         0.3 - 25 October 2022 - tidying config interpolation
         0.2 - 25 October 2022 - add version information in output
         0.1 - 24 October 2022 - testing
@@ -62,10 +63,10 @@ Param(
 )
 
 
-###########
-# VERSION #
-###########
-$Version = "0.3"
+#############
+# CONSTANTS #
+#############
+Set-Variable Version -Option Constant -Value "0.4"
 
 
 #############
@@ -166,7 +167,7 @@ snmp-server community "intech"
 snmp-server community ipaddr 207.13.251.0 intech
 snmp-server community ipmask 255.255.255.0 intech
 snmp-server user "admin" DefaultWrite auth-sha512-key 5e00d5ffdd6995ee6dbc4c21a48a813b942e487f147f4de13d04906060304b500f423026a1fe672e9edbb3de56345cd2ec6e8c5922afbd6562b6485d6f490026 priv-aes128-key 5e00d5ffdd6995ee6dbc4c21a48a813b942e487f147f4de13d04906060304b500f423026a1fe672e9edbb3de56345cd2ec6e8c5922afbd6562b6485d6f490026
-access-list 1 permit $($Network)0 255.255.255.0
+access-list 1 permit $($Network)0 0.0.0.255
 interface g1
 port-security
 port-security max-dynamic 2
