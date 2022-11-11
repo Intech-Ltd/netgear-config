@@ -20,7 +20,8 @@
 
 .PARAMETER ProfitCentre
 
-    Name of destination Profit Centre (e.g. 940E-DARTFORD).
+    Name of destination Profit Centre (e.g. 940E-DARTFORD) or satellite (e.g.
+    596-LEEK).
 
 .COMPONENT
     EPCS
@@ -40,13 +41,14 @@
 .NOTES
     This release:
 
-        Version: 0.4 [Set also in the $Version constant]
-        Date:    26 October 2022
+        Version: 1.0 [Set also in the $Version constant]
+        Date:    11 November 2022
         Author:  Rob Pomeroy
         Company: Intech Ltd for Edmundson Electrical
 
     Version history:
 
+        1.0 - 11 November 2022 - clarifying text for satellite configs
         0.4 - 26 October 2022 - change of source IP mask in ACL
         0.3 - 25 October 2022 - tidying config interpolation
         0.2 - 25 October 2022 - add version information in output
@@ -59,14 +61,14 @@
 Param(
     [Parameter(Position = 0)][string]$LANIP,       # LAN without CIDR mask
     [Parameter(Position = 1)][int]$SwitchNumber,   # From 1 to 9
-    [Parameter(Position = 2)][string]$ProfitCentre # Profit Centre name
+    [Parameter(Position = 2)][string]$ProfitCentre # Profit Centre/satellite name
 )
 
 
 #############
 # CONSTANTS #
 #############
-Set-Variable Version -Option Constant -Value "0.4"
+Set-Variable Version -Option Constant -Value "1.0"
 
 
 #############
@@ -85,7 +87,7 @@ if($PSBoundParameters.ContainsKey('LANIP')) {
 }
 # Prompt for IP, if required
 while($null -eq $LANIP -or $LANIP -eq '') {
-    $LANIP = (Read-Host -Prompt "[$Version] Enter the profit centre LAN IP (e.g. 10.1.57.0)").Trim()
+    $LANIP = (Read-Host -Prompt "[$Version] Enter the profit centre/satellite LAN IP (e.g. 10.1.57.0)").Trim()
     $LANIP = Test-IP -LANIP $LANIP
 }
 $Network = ($LANIP  -Replace "\.[^.]*$", ".")
@@ -104,12 +106,14 @@ Write-Host "[$Version] Switch number is $SwitchNumber"
 
 # Prompt for Profit Centre, if required
 while($null -eq $ProfitCentre -or $ProfitCentre -eq '') {
-    $ProfitCentre = (Read-Host -Prompt "[$Version] Enter the profit centre name (e.g. 940E-DARTFORD)").Trim()
+    $ProfitCentre = (Read-Host -Prompt "[$Version] Enter the profit centre/satellite name (e.g. 940E-DARTFORD)").Trim()
 }
 
 # Strip invalid characters from the profit centre name and convert to uppercase
 $ProfitCentre = ($ProfitCentre -replace '[^a-zA-Z0-9\-_]', '').ToUpper()
-Write-Host "[$Version] Profit centre is $ProfitCentre"
+Write-Host "================================================================================================="
+Write-Host "[$Version] Profit centre/satellite is $ProfitCentre"
+Write-Host "[$Version] Switch IP will be $($Network)2$SwitchNumber"
 
 
 #################
