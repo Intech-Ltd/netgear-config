@@ -41,13 +41,14 @@
 .NOTES
     This release:
 
-        Version: 1.1 [Set also in the $Version constant]
-        Date:    18 November 2022
+        Version: 1.2 [Set also in the $Version constant]
+        Date:    28 March 2023
         Author:  Rob Pomeroy
         Company: Intech Ltd for Edmundson Electrical
 
     Version history:
 
+        1.2 - 28 March 2023    - add jump box LANs to ACLs
         1.1 - 18 November 2022 - remove DoS protection (after pilot)
         1.0 - 11 November 2022 - clarifying text for satellite configs
         0.4 - 26 October 2022  - change of source IP mask in ACL
@@ -69,7 +70,7 @@ Param(
 #############
 # CONSTANTS #
 #############
-Set-Variable Version -Option Constant -Value "1.1"
+Set-Variable Version -Option Constant -Value "1.2"
 
 
 #############
@@ -158,6 +159,12 @@ snmp-server community ipmask 255.255.0.0 servicecentre
 snmp-server community "intech"
 snmp-server community ipaddr 207.13.251.0 intech
 snmp-server community ipmask 255.255.255.0 intech
+snmp-server community "jumpboxlive"
+snmp-server community ipaddr 10.110.20.0 jumpboxlive
+snmp-server community ipmask 255.255.255.0 jumpboxlive
+snmp-server community "jumpboxdr"
+snmp-server community ipaddr 10.110.120.0 jumpboxdr
+snmp-server community ipmask 255.255.255.0 jumpboxdr
 snmp-server user "admin" DefaultWrite auth-sha512-key 5e00d5ffdd6995ee6dbc4c21a48a813b942e487f147f4de13d04906060304b500f423026a1fe672e9edbb3de56345cd2ec6e8c5922afbd6562b6485d6f490026 priv-aes128-key 5e00d5ffdd6995ee6dbc4c21a48a813b942e487f147f4de13d04906060304b500f423026a1fe672e9edbb3de56345cd2ec6e8c5922afbd6562b6485d6f490026
 access-list 1 permit $($Network)0 0.0.0.255
 interface g1
@@ -351,6 +358,12 @@ permit ip-source 10.12.0.0 mask 255.255.0.0 service snmp priority 6
 permit ip-source 207.13.251.0 mask 255.255.255.0 service https priority 7
 permit ip-source 207.13.251.0 mask 255.255.255.0 service http priority 8
 permit ip-source 207.13.251.0 mask 255.255.255.0 service snmp priority 9
+permit ip-source 10.110.20.0 mask 255.255.255.0 service https priority 10
+permit ip-source 10.110.20.0 mask 255.255.255.0 service http priority 11
+permit ip-source 10.110.20.0 mask 255.255.255.0 service snmp priority 12
+permit ip-source 10.110.120.0 mask 255.255.255.0 service https priority 13
+permit ip-source 10.110.120.0 mask 255.255.255.0 service http priority 14
+permit ip-source 10.110.120.0 mask 255.255.255.0 service snmp priority 15
 exit
 management access-class "ProfitCentre"
 exit
